@@ -9,6 +9,6 @@ import androidx.navigation.NavController
 fun TvShowDetailsScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    cityListViewModel: TvShowDetailsViewModel = viewModel()
+    tvShowDetailsViewModel: TvShowDetailsViewModel = viewModel()
 ) {
 }

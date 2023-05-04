@@ -1,0 +1,427 @@
+swagger: "2.0"
+info:
+  description: "TV show api for mobile software lab homework."
+  version: "1.0.0"
+  title: "TV Show API"
+host: "api.themoviedb.org"
+basePath: "/3"
+tags:
+- name: "TV"
+  description: "Everything about TV shows."
+  externalDocs:
+    description: "Find out more"
+    url: "https://developers.themoviedb.org/3/tv"
+- name: "Review - MOCK"
+  description: "Review your TV shows."
+  
+schemes:
+- "https"
+- "http"
+paths:
+  /tv/popular:
+    get:
+      tags:
+      - "TV"
+      summary: "Get TV shows."
+      description: "Returns a list of the current popular TV shows on TMDB."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Specify which page to query."
+        type: "integer"
+        format: "int32"
+      - name: "language"
+        in: "query"
+        description: "Pass a ISO 639-1 value to display translated data for the fields that support it."
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/TvShowListResult"
+        "401":
+          description: "Invalid API key."
+        "404":
+          description: "The resource you requested could not be found."
+      security:
+      - api_key: []
+  /tv/{id}:
+    get:
+      tags:
+      - "TV"
+      summary: "Get TV show details."
+      description: "Returns with the TV show details with the given ID."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the TV Show to return."
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "language"
+        in: "query"
+        description: "Pass a ISO 639-1 value to display translated data for the fields that support it."
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/TvShowDetailsResult"
+        "401":
+          description: "Invalid API key."
+        "404":
+          description: "The resource you requested could not be found."
+      security:
+      - api_key: []
+  /tv/{id}/review:
+    post:
+      tags:
+      - "Review - MOCK"
+      summary: "Add a review."
+      description: "Creates a review for the TV show with the given ID."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the TV Show to which the review is added."
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "body"
+        in: "body"
+        description: "The review to create."
+        required: true
+        schema:
+          $ref: "#/definitions/AddOrEditReview"
+      responses:
+        "201":
+          description: "Review successfully created."
+        "401":
+          description: "Invalid API key."
+        "404":
+          description: "The resource you requested could not be found."
+      security:
+      - api_key: []
+  /review/{id}:
+    put:
+      tags:
+      - "Review - MOCK"
+      summary: "Edit review."
+      description: "Updates the review with the given ID."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the Review to be edited."
+        required: true
+        type: "integer"
+        format: "int32"
+      - name: "body"
+        in: "body"
+        description: "The edited review."
+        required: true
+        schema:
+          $ref: "#/definitions/AddOrEditReview"
+      responses:
+        "204":
+          description: "Review successfully edited."
+        "401":
+          description: "Invalid API key."
+        "404":
+          description: "The resource you requested could not be found."
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "Review - MOCK"
+      summary: "Delete review."
+      description: "Deletes the review with the given ID."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the Review to be deleted."
+        required: true
+        type: "integer"
+        format: "int32"
+      responses:
+        "204":
+          description: "Review successfully deleted."
+        "401":
+          description: "Invalid API key."
+        "404":
+          description: "The resource you requested could not be found."
+      security:
+      - api_key: []
+
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "query"
+definitions:
+  TvShowListResult:
+    type: object
+    properties:
+      page: 
+        type: integer
+        format: int32
+      results: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            backdrop_path: 
+              type: string
+            first_air_date: 
+              type: string
+              format: date
+            genre_ids: 
+              type: array
+              items: 
+                type: integer
+                format: int32
+            id: 
+              type: integer
+              format: int32
+            name: 
+              type: string
+            origin_country: 
+              type: array
+              items: 
+                type: string
+            original_language: 
+              type: string
+            original_name: 
+              type: string
+            overview: 
+              type: string
+            popularity: 
+              type: number
+            poster_path: 
+              type: string
+            vote_average: 
+              type: number
+            vote_count: 
+              type: integer
+              format: int32
+      total_pages: 
+        type: integer
+        format: int32
+      total_results: 
+        type: integer
+        format: int32
+  TvShowDetailsResult:
+    type: object
+    properties:
+      backdrop_path: 
+        type: string
+      created_by: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            id: 
+              type: integer
+              format: int32
+            credit_id: 
+              type: string
+            name: 
+              type: string
+            gender: 
+              type: integer
+              format: int32
+            profile_path: 
+              type: string
+      episode_run_time: 
+        type: array
+        items: 
+          type: integer
+          format: int32
+      first_air_date: 
+        type: string
+        format: date
+      genres: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            id: 
+              type: integer
+              format: int32
+            name: 
+              type: string
+      homepage: 
+        type: string
+      id: 
+        type: integer
+        format: int32
+      in_production: 
+        type: boolean
+      languages: 
+        type: array
+        items: 
+          type: string
+      last_air_date: 
+        type: string
+        format: date
+      last_episode_to_air: 
+        type: object
+        properties: 
+          air_date: 
+            type: string
+            format: date
+          episode_number: 
+            type: integer
+            format: int32
+          id: 
+            type: integer
+            format: int32
+          name: 
+            type: string
+          overview: 
+            type: string
+          production_code: 
+            type: string
+          season_number: 
+            type: integer
+            format: int32
+          still_path: 
+            type: string
+          vote_average: 
+            type: number
+          vote_count: 
+            type: integer
+            format: int32
+      name: 
+        type: string
+      next_episode_to_air: 
+        type: string
+        format: nullable
+      networks: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            name: 
+              type: string
+            id: 
+              type: integer
+              format: int32
+            logo_path: 
+              type: string
+            origin_country: 
+              type: string
+      number_of_episodes: 
+        type: integer
+        format: int32
+      number_of_seasons: 
+        type: integer
+        format: int32
+      origin_country: 
+        type: array
+        items: 
+          type: string
+      original_language: 
+        type: string
+      original_name: 
+        type: string
+      overview: 
+        type: string
+      popularity: 
+        type: number
+      poster_path: 
+        type: string
+      production_companies: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            id: 
+              type: integer
+              format: int32
+            logo_path: 
+              type: string
+            name: 
+              type: string
+            origin_country: 
+              type: string
+      production_countries: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            iso_3166_1: 
+              type: string
+            name: 
+              type: string
+      seasons: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            air_date: 
+              type: string
+              format: date
+            episode_count: 
+              type: integer
+              format: int32
+            id: 
+              type: integer
+              format: int32
+            name: 
+              type: string
+            overview: 
+              type: string
+            poster_path: 
+              type: string
+            season_number: 
+              type: integer
+              format: int32
+      spoken_languages: 
+        type: array
+        items: 
+          type: object
+          properties: 
+            english_name: 
+              type: string
+            iso_639_1: 
+              type: string
+            name: 
+              type: string
+      status: 
+        type: string
+      tagline: 
+        type: string
+      type: 
+        type: string
+      vote_average: 
+        type: number
+      vote_count: 
+        type: integer
+        format: int32
+  AddOrEditReview:
+    type: object
+    properties:
+      rating: 
+        type: number
+      comment: 
+        type: string
+      
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
