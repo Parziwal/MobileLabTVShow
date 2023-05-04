@@ -9,6 +9,6 @@ import androidx.navigation.NavController
 fun TvShowListScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    cityListViewModel: TvShowListViewModel = viewModel()
+    tvShowListViewModel: TvShowListViewModel = viewModel()
 ) {
 }
