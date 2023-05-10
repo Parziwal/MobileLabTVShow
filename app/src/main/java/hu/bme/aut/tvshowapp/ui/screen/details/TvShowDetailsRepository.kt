@@ -9,6 +9,7 @@ import hu.bme.aut.tvshowapp.network.TvShowApi
 import hu.bme.aut.tvshowapp.persistence.ReviewDao
 import hu.bme.aut.tvshowapp.persistence.model.ReviewEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -19,33 +20,34 @@ class TvShowDetailsRepository @Inject constructor(
     private val tvShowApi: TvShowApi,
 ) {
 
-    fun getTvShowDetails(id: Long) = flow {
-        reviewDao.getTvShowReviews(id).map { reviews ->
+    suspend fun getTvShowDetails(id: Long): TvShowDetails {
+        return tvShowApi.getTvShowDetails(id).let { tvShow ->
+            TvShowDetails(
+                tvShow.id,
+                tvShow.name,
+                if (tvShow.posterPath != null) IMAGE_PREFIX_URL + tvShow.posterPath else Config.IMAGE_PLACEHOLDER,
+                tvShow.voteAverage,
+                tvShow.firstAirDate,
+                tvShow.genres.joinToString(separator = ", ") { it.name },
+                tvShow.overview,
+                tvShow.createdBy.joinToString(separator = ", ") { it.name },
+                tvShow.seasons.map {
+                    Season(
+                        it.seasonNumber,
+                        it.name,
+                        it.overview,
+                        it.airDate.split('-')[0],
+                        if (it.posterPath != null) IMAGE_PREFIX_URL + it.posterPath else Config.IMAGE_PLACEHOLDER,
+                        it.episodeCount
+                    )
+                },
+            )
+        }
+    }
+
+    fun getTvShowReviews(tvShowId: Long): Flow<List<Review>> {
+        return reviewDao.getTvShowReviews(tvShowId).map { reviews ->
             reviews.map { Review(it.id, it.rating, it.comment) }
-        }.collect { reviews ->
-            val tvShowDetails = tvShowApi.getTvShowDetails(id).let { tvShow ->
-                TvShowDetails(
-                    tvShow.id,
-                    tvShow.name,
-                    if (tvShow.posterPath != null) IMAGE_PREFIX_URL + tvShow.posterPath else Config.IMAGE_PLACEHOLDER,
-                    tvShow.voteAverage,
-                    tvShow.firstAirDate,
-                    tvShow.genres.map { it.name },
-                    tvShow.overview,
-                    tvShow.createdBy.map { it.name },
-                    tvShow.seasons.map {
-                        Season(
-                            it.seasonNumber,
-                            it.name,
-                            it.overview,
-                            it.airDate,
-                            it.episodeCount
-                        )
-                    },
-                    reviews,
-                )
-            }
-            emit(tvShowDetails);
         }
     }
 
