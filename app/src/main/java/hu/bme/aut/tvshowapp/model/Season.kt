@@ -5,5 +5,6 @@ data class Season(
     val name: String,
     val overview: String,
     val airDate: String,
+    val posterPath: String,
     val episodeCount: Long,
 )

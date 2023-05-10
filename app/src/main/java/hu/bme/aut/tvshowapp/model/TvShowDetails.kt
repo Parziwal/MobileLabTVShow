@@ -6,9 +6,10 @@ data class TvShowDetails(
     val posterPath: String?,
     val voteAverage: Double,
     val firstAirDate: String,
-    val genres: List<String>,
+    val genres: String,
     val overview: String,
-    val createdBy: List<String>,
+    val createdBy: String,
     val seasons: List<Season>,
-    val reviews: List<Review>,
-)
+) {
+    constructor() : this(0, "", "", 0.0, "", "", "", "", emptyList())
+}
