@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class ReviewEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val tvShowId: Long,
-    val rating: Int,
+    val rating: Double,
     val comment: String,
 )
