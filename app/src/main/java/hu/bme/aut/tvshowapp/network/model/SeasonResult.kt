@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SeasonResult (
     @SerialName("air_date")
-    val airDate: String,
+    val airDate: String?,
     @SerialName("episode_count")
     val episodeCount: Long,
     val id: Long,

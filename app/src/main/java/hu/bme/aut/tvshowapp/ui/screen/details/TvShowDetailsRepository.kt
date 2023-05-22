@@ -36,7 +36,7 @@ class TvShowDetailsRepository @Inject constructor(
                         it.seasonNumber,
                         it.name,
                         it.overview,
-                        it.airDate.split('-')[0],
+                        it.airDate?.split('-')?.get(0) ?: "-",
                         if (it.posterPath != null) IMAGE_PREFIX_URL + it.posterPath else Config.IMAGE_PLACEHOLDER,
                         it.episodeCount
                     )
